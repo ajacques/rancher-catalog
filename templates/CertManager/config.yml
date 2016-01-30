@@ -1,0 +1,5 @@
+name: CertManager
+description: |
+  Certificate Management UI
+version: 1.0.0
+category: Operations
