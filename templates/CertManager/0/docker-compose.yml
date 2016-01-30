@@ -3,3 +3,33 @@ redis:
     io.rancher.container.pull_image: always
   image: redis:3.0.2
   stdin_open: false
+db:
+  environment:
+    POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  labels:
+    io.rancher.container.pull_image: always
+  tty: false
+  image: postgres:latest
+  stdin_open: false
+  net: bridge
+web:
+  environment:
+    RAILS_ENV: production
+    DB_ADAPTER: postgresql
+    DB_USER: postgres
+    DB_PASS: "${DB_PASSWORD}"
+    DB_HOST: db
+    DB_DATABASE: certmanager
+    VIRTUAL_HOST: "${HOST_NAME}"
+  cap_drop:
+    - ALL
+  labels:
+    io.rancher.container.pull_image: always
+  tty: false
+  image: docker.technowizardry.net/certmanager_web:1
+  links:
+    - saltmaster:salt
+    - db
+    - redis
+  stdin_open: false
+  net: bridge

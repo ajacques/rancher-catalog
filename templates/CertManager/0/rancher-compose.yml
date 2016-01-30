@@ -1,2 +1,17 @@
+.catalog:
+  name: Soteria
+  version: 1.0.0
+  minimum_rancher_version: v0.46.0
+  questions:
+    -
+      variable: DB_PASSWORD
+      label: Database root password
+      type: string
+    -
+      variable: HOST_NAME
+      label: Domain name
+      type: string
 redis:
+  scale: 1
+db:
   scale: 1
