@@ -1,0 +1,5 @@
+redis:
+  labels:
+    io.rancher.container.pull_image: always
+  image: redis:3.0.2
+  stdin_open: false
