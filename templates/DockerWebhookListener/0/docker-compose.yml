@@ -22,11 +22,17 @@ services:
     labels:
       io.rancher.container.pull_image: always
   Redis:
+    cap_add:
+    - CHOWN
+    - SETGID
+    - SETUID
+    cap_drop:
+    - ALL
     image: redis:3.2.6-alpine
-    volumes_from:
-    - Data
     labels:
       io.rancher.sidekicks: Data
+    volumes_from:
+    - Data
   Data:
     image: busybox:latest
     mem_limit: 4194304
@@ -39,17 +45,17 @@ services:
       io.rancher.container.start_once: 'true'
       io.rancher.container.pull_image: always
   worker:
-    image: ajacques/rancher-webhook:latest
+    cap_drop:
+    - ALL
+    command:
+    - rake
+    - resque:work
     environment:
       QUEUE: '*'
       RANCHER_ACCESS_KEY: ${RANCHER_ACCESS_KEY}
       RANCHER_SECRET_KEY: ${RANCHER_SECRET_KEY}
       RANCHER_URI: ${RANCHER_URI}
       REDIS_URI: redis:6379/resque
-    cap_drop:
-    - ALL
+    image: ajacques/rancher-webhook:latest
     links:
     - Redis:redis
-    command:
-    - rake
-    - resque:work
