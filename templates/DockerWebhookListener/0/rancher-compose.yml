@@ -1,0 +1,31 @@
+.catalog:
+  name: Docker Webhook Listener
+  version: 1.0.0
+  minimum_rancher_version: v1.2.0
+  questions:
+    -
+      variable: RANCHER_ACCESS_KEY
+      label: Rancher access key
+      type: string
+    -
+      variable: RANCHER_SECRET_KEY
+      label: Rancher secret key
+      type: string
+    -
+      variable: RANCHER_URI
+      label: Rancher environment URI
+      type: string
+version: '2'
+services:
+  scheduler:
+    scale: 1
+    start_on_create: true
+  Agent:
+    scale: 1
+    start_on_create: true
+  Redis:
+    scale: 1
+    start_on_create: true
+  worker:
+    scale: 1
+    start_on_create: true

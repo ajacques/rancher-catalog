@@ -1,0 +1,55 @@
+version: '2'
+services:
+  scheduler:
+    image: ajacques/rancher-webhook:latest
+    environment:
+      REDIS_URI: redis:6379/resque
+    cap_drop:
+    - ALL
+    links:
+    - Redis:redis
+    command:
+    - rake
+    - resque:scheduler
+  Agent:
+    image: ajacques/rancher-webhook:latest
+    environment:
+      REDIS_URI: redis:6379/resque
+    cap_drop:
+    - ALL
+    links:
+    - Redis:redis
+    labels:
+      io.rancher.container.pull_image: always
+  Redis:
+    image: redis:3.2.6-alpine
+    volumes_from:
+    - Data
+    labels:
+      io.rancher.sidekicks: Data
+  Data:
+    image: busybox:latest
+    mem_limit: 4194304
+    cap_drop:
+    - ALL
+    network_mode: none
+    volumes:
+    - /data
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.container.pull_image: always
+  worker:
+    image: ajacques/rancher-webhook:latest
+    environment:
+      QUEUE: '*'
+      RANCHER_ACCESS_KEY: ${RANCHER_ACCESS_KEY}
+      RANCHER_SECRET_KEY: ${RANCHER_SECRET_KEY}
+      RANCHER_URI: ${RANCHER_URI}
+      REDIS_URI: redis:6379/resque
+    cap_drop:
+    - ALL
+    links:
+    - Redis:redis
+    command:
+    - rake
+    - resque:work
