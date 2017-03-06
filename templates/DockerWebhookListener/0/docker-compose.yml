@@ -52,10 +52,10 @@ services:
     - resque:work
     environment:
       QUEUE: '*'
-      RANCHER_ACCESS_KEY: ${RANCHER_ACCESS_KEY}
-      RANCHER_SECRET_KEY: ${RANCHER_SECRET_KEY}
       RANCHER_URI: ${RANCHER_URI}
       REDIS_URI: redis:6379/resque
     image: ajacques/rancher-webhook:latest
+    labels:
+      io.rancher.container.create_agent: true
     links:
     - Redis:redis

@@ -1,5 +1,5 @@
 name: Docker Webhook Listener
 description: |
   Utility that listens for Docker Hub image push events, and automatically upgrades them in your Rancher environment.
-version: 1.0.0
+version: 1.0.1
 category: Operations
