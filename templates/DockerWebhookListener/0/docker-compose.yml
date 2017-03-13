@@ -57,5 +57,6 @@ services:
     image: ajacques/rancher-webhook:latest
     labels:
       io.rancher.container.create_agent: true
+      io.rancher.container.agent.role: environment
     links:
     - Redis:redis
